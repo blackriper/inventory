@@ -15,3 +15,8 @@ Nuevo producto
 ![Image text](assets/newproduct.png)
 
 
+## Notas 
+
+agregar jwt para usuarios  agregar ruta para crear usuarios
+agregar requision de mercancia 
+ver requisiciones del dia 
