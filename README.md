@@ -15,7 +15,3 @@ Nuevo producto
 ![Image text](assets/newproduct.png)
 
 
-## Notas 
-
-agregar requision de mercancia 
-buscar requisiciones 
