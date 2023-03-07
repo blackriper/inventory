@@ -29,7 +29,7 @@ Vista inicial del proyecto donde se muestran los productos registrados en la bas
 ## Nuevo producto 
 Formulario para registrar un nuevo producto no es necesario proportionar un sku.
 
-![Nuevo producto](assets/newproduct.PNG)
+![Nuevo producto](assets/newproduct.png)
 
 ## Actualizar Producto
 Para actualizar solo hay que seleccionar un producto en la lista y este nos dara un formulario con los datos del producto solo es necesario hacer cambios y dar click en act product.
