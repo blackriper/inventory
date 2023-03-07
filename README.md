@@ -29,27 +29,27 @@ Vista inicial del proyecto donde se muestran los productos registrados en la bas
 ## Nuevo producto 
 Formulario para registrar un nuevo producto no es necesario proportionar un sku.
 
-![Nuevo producto](assets/newproduct.png)
+![Nuevo producto](assets/newproduct.PNG)
 
 ## Actualizar Producto
 Para actualizar solo hay que seleccionar un producto en la lista y este nos dara un formulario con los datos del producto solo es necesario hacer cambios y dar click en act product.
 
 
-![Actualizar producto](assets/update.png)
+![Actualizar producto](assets/update.PNG)
 
 ## Eliminar Producto
 
 Para eliminar hay que seleccionar el producto y dar click en el boton delete y confirmar en la ventana de dialogo.
 
 
-![Actualizar producto](assets/delete.png)
+![Actualizar producto](assets/delete.PNG)
 
 
 ## Restar Stock Producto
 
 Para restar el producto solo hay que seleccionarlo y dar click en el boton req product y seleccionar la cantidad y confirmar cambios en la ventana de dialogo.
 
-![Restar stock producto](assets/restcan.png)
+![Restar stock producto](assets/restcan.PNG)
 
 
 ## Incializar servidor de desarrollo
