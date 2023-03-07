@@ -15,25 +15,27 @@ import { useState } from 'react';
 import { useProduct } from '../../context/productContext';
 import { useLocation } from "wouter";
 import { useBreakpointValue } from '@chakra-ui/react';
+import { Product } from '../../types';
 
 export function Addprod() {
 
   const [name, setname] = useState("");
   const [cant, setcant] = useState(10);
-  const { addProduct, getProducts } = useProduct();
+  const { addProduct} = useProduct();
   const [location, setLocation] = useLocation();
   const toast = useToast();
   const size = useBreakpointValue({ base: '100%', md: '30%' })
 
   const handleClick = async () => {
 
-    if (name) {
+     if (!name) alert("there are empty fields") 
 
       let product = {
         name,
         cant
       }
-      await addProduct(product);
+      const status=await addProduct(product);
+     if(status==201){ 
       toast({
         title: 'Product added.',
         description: `${name} product create`,
@@ -41,12 +43,9 @@ export function Addprod() {
         duration: 2000,
         isClosable: true,
       });
-      getProducts()
       setLocation("/")
-    } else {
-      alert("there are empty fields")
     }
-
+   
   }
 
 
@@ -64,7 +63,7 @@ export function Addprod() {
           max={10000}
           focusBorderColor='yellow.400'
           value={cant}
-          onChange={(cant) => setcant(cant)}>
+          onChange={(cant) => setcant(parseInt(cant,10))}>
           <NumberInputField />
           <NumberInputStepper>
             <NumberIncrementStepper />

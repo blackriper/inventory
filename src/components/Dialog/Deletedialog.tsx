@@ -1,4 +1,5 @@
 import { useRef} from "react";
+import { useDialog } from "./hooks/useDialog";
 import {
   AlertDialog,
   AlertDialogBody,
@@ -9,10 +10,16 @@ import {
   Button
 } from '@chakra-ui/react'
 
-export function Deletedialog({sku,isOpen,onClose,handleDelete}) {
-    const cancelRef = useRef();
-    const handel=()=>handleDelete(sku);
-    
+
+interface Props {
+  sku: any
+  isOpen: boolean;
+  onClose(): void;
+  handleDelete(sku:string):Promise<void>;
+}
+
+export function Deletedialog({sku,isOpen,onClose,handleDelete}:Props) {
+    const cancelRef = useRef<any>();  
     return (
         <>
             <AlertDialog
@@ -34,7 +41,7 @@ export function Deletedialog({sku,isOpen,onClose,handleDelete}) {
                   <Button ref={cancelRef} onClick={onClose}>
                     Cancel
                   </Button>
-                  <Button colorScheme='red' onClick={handel} ml={3}>
+                  <Button colorScheme='red' onClick={()=>handleDelete(sku)} ml={3}>
                     Delete
                   </Button>
                 </AlertDialogFooter>

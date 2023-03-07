@@ -1,8 +1,10 @@
-import { useState, createContext, useEffect, useContext } from "react";
-import axios from "axios";
+import React, { useState, createContext, useEffect, useContext } from "react";
+import { deleteOneproduct, getProducts, newProduct, restProduct, updateOneproduct } from "../services";
+import { ContextInventory, InputProduct, Product } from "../types";
+import { getData, removeData, setData } from "../utilities";
 
 
-const productContext = createContext();
+const productContext = createContext<ContextInventory|null >(null);
 
 export const useProduct = () => {
     const context = useContext(productContext);
@@ -10,44 +12,75 @@ export const useProduct = () => {
     return context;
 }
 
+interface Props {
+   children: React.ReactNode
+}
 
-export const ProductContext = ({ children }) => {
-    const [products, setproducts] = useState([]);
 
-    //loading products
-    const getProducts = async () => {
-        const { data } = await axios.get('http://localhost:5000/api/products');
-        setproducts(data)
+export const ProductContext = ({ children }:Props) => {
+     
+    const [products, setproducts] = useState<Product[]>([]);
+    
+    const getproducts = async () =>{
+         const data:Product[]=getData()==="" ?await getProducts():JSON.parse(getData());
+         if(getData()==="") setData(data)
+         setproducts(data)
+    }
+    useEffect(()=>{getproducts()},[])
+
+    const deleteProduct =async(sku:string)=>{
+        const status= await deleteOneproduct(sku);
+        if(status==200){
+            let prods=products.filter((product)=>product.sku!=sku);
+            removeData()
+            setData(prods)
+            setproducts(prods)
+        }
+        return status
     }
 
-    useEffect(() => getProducts(), []);
+    const getProduct = (sku: string) => products.filter((product)=>product.sku===sku)[0]
 
-    //actions products
-    const addProduct = async (product) => await axios.post('http://localhost:5000/api/newproduct', product);
-
-    const updateProduct = async (newproduct) => await axios.put('http://localhost:5000/api/updateproduct', newproduct);
-
-    const deleteProduct = async (sku) => await axios.delete(`http://localhost:5000/api/deleteproduct/${sku}`);
-
-    const restCant = async (newcant) => await axios.put("http://localhost:5000/api/restcant", newcant);
-
-    const getProduct = (id) => {
-        const product = products.filter((product) => product.sku === id);
-        return product[0]
+    const restCant=async (sku:string,cant:number)=>{
+        const status= await restProduct(sku,cant);
+        if(status==200){
+            let product= products.map((p)=>{
+                if(p.sku===sku) p.cant=cant;
+                return p;
+            })
+            removeData()
+            setData(product)
+            setproducts(product)
+        }
+        return status 
     }
 
+    const addProduct = async(pr:InputProduct) =>{
+        const status= await newProduct(pr);
+        if (status==201){
+           removeData() 
+           await getproducts()
+       }
+       return status
+    }
+
+    const updateProduct = async(pr:InputProduct,sku:string) =>{
+        const status= await updateOneproduct(pr,sku);
+        if (status==200){
+           removeData() 
+           await getproducts()
+         }
+       return status
+    }
+      
     return (
-        <productContext.Provider value={{
-            products,
-            setproducts,
-            getProducts,
-            getProduct,
-            addProduct,
-            updateProduct,
-            deleteProduct,
-            restCant
-
-        }}>
+        <productContext.Provider value={{products,
+                                         setproducts,
+                                         deleteProduct,
+                                         getProduct,
+                                         restCant,
+                                         addProduct,
+                                         updateProduct}}>
             {children}
         </productContext.Provider>
     );

@@ -7,8 +7,14 @@ import {
   Td,
   Checkbox
  } from '@chakra-ui/react';
+import { Product } from '../../types';
 
-export  function Products({products,getCheckboxProps}) {
+ interface Props{
+  products:Product[];
+  getCheckboxProps:any
+ }
+
+export  function Products({products,getCheckboxProps}:Props) {
    return (
     <Table variant="striped" size='sm' border='1px' boxShadow='sm' mb={48}>
      <Thead>
