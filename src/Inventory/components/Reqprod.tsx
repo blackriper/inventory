@@ -1,42 +1,33 @@
 import {
-    AlertDialog,
-    AlertDialogBody,
-    AlertDialogFooter,
-    AlertDialogHeader,
-    AlertDialogContent,
-    AlertDialogOverlay,
-    Button,
-    NumberInput,
-    NumberInputField,
-    NumberInputStepper,
-    NumberIncrementStepper,
-    NumberDecrementStepper,
-    useToast
+  Button,
+  NumberInput,
+  Dialog,
+  Portal
 } from '@chakra-ui/react'
 import { useRef, useState } from 'react';
+import { toaster } from '../../components/ui/toaster';
 import { useProduct } from '../../context/productContext';
 
-interface Props{
-    view: boolean;
-    onClose(): void;
-    sku:any;
+interface Props {
+  view: boolean;
+  onClose(): void;
+  sku: any;
 }
 
 
 
-export function Reqprod({view,onClose,sku}:Props) {
+export function Reqprod({ view, onClose, sku }: Props) {
 
-    const [cantr, setcantr] = useState<number>(1);
-    const cancelRef = useRef<any>();
-    const{getProduct,restCant}=useProduct();
-    const toast=useToast();
+  const [cantr, setcantr] = useState<number>(1);
+  const cancelRef = useRef<any>();
+  const { getProduct, restCant } = useProduct();
 
-    const rest=async ()=>{
-       const{cant}=getProduct(sku);
-       let can=cant-cantr;
-       const status=await restCant(sku, can);
-      if(status==200){
-       toast({
+  const rest = async () => {
+    const { cant } = getProduct(sku);
+    let can = cant - cantr;
+    const status = await restCant(sku, can);
+    if (status == 200) {
+      toaster.create({
         title: 'Product req.',
         description: `${sku} product requsion sucessfully`,
         status: 'success',
@@ -44,52 +35,56 @@ export function Reqprod({view,onClose,sku}:Props) {
         isClosable: true,
       });
     }
-     
-      onClose();
-    }
+
+    onClose();
+  }
 
 
-    return (
-        <>
-            <AlertDialog
-                isOpen={view}
-                leastDestructiveRef={cancelRef}
-                onClose={onClose}
-            >
-                <AlertDialogOverlay>
-                    <AlertDialogContent>
-                        <AlertDialogHeader fontSize='lg' fontWeight='bold'>
-                            Req Product
-                        </AlertDialogHeader>
+  return (
+    <>
+      <Dialog.Root
+        role="alertdialog"
+        isOpen={view}
+        leastDestructiveRef={cancelRef}
+        onClose={onClose}
+      >
+        <Portal>
+          <Dialog.Backdrop />
+          <Dialog.Positioner>
+            <Dialog.Content>
+              <Dialog.Header fontSize='lg' fontWeight='bold'>
+                Req Product
+              </Dialog.Header>
 
-                        <AlertDialogBody>
-                            <NumberInput
-                                w="100%"
-                                min={1}
-                                max={10000}
-                                focusBorderColor='yellow.400'
-                                value={cantr}
-                                onChange={(cantr) => setcantr(parseInt(cantr,10))}>
-                                <NumberInputField />
-                                <NumberInputStepper>
-                                    <NumberIncrementStepper />
-                                    <NumberDecrementStepper />
-                                </NumberInputStepper>
-                            </NumberInput>
+              <Dialog.Body>
+                <NumberInput.Root
+                  w="100%"
+                  min={1}
+                  max={10000}
+                  focusBorderColor='yellow.400'
+                  value={cantr}
+                  onChange={(cantr: string) => setcantr(parseInt(cantr, 10))}>
+                  <NumberInput.Input />
+                  <NumberInput.Control>
+                    <NumberInput.IncrementTrigger />
+                    <NumberInput.DecrementTrigger />
+                  </NumberInput.Control>
+                </NumberInput.Root>
 
-                        </AlertDialogBody>
+              </Dialog.Body>
 
-                        <AlertDialogFooter>
-                            <Button ref={cancelRef} onClick={onClose}>
-                                Cancel
-                            </Button>
-                            <Button colorScheme='purple' onClick={rest} ml={3}>
-                                Acept
-                            </Button>
-                        </AlertDialogFooter>
-                    </AlertDialogContent>
-                </AlertDialogOverlay>
-            </AlertDialog>
-        </>
-    )
+              <Dialog.Footer>
+                <Button ref={cancelRef} onClick={onClose}>
+                  Cancel
+                </Button>
+                <Button colorScheme='purple' onClick={rest} ml={3}>
+                  Accept
+                </Button>
+              </Dialog.Footer>
+            </Dialog.Content>
+          </Dialog.Positioner>
+        </Portal>
+      </Dialog.Root>
+    </>
+  )
 }

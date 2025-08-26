@@ -1,42 +1,37 @@
 import {
   Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
   Checkbox
- } from '@chakra-ui/react';
+} from '@chakra-ui/react';
 import { Product } from '../../types';
 
- interface Props{
-  products:Product[];
-  getCheckboxProps:any
- }
+interface Props {
+  products: Product[];
+  getCheckboxProps: any
+}
 
-export  function Products({products,getCheckboxProps}:Props) {
-   return (
-    <Table variant="striped" size='sm' border='1px' boxShadow='sm' mb={48}>
-     <Thead>
-      <Tr>
-       <Th>Sku</Th>
-       <Th>Name</Th>
-       <Th isNumeric>Cant</Th>
-      </Tr>
-    </Thead>
-    <Tbody>
-     {products.map((product)=>(
-       <Tr key={product.sku}>
-        <Td>
-         <Checkbox size='md' colorScheme='purple' {...getCheckboxProps({value:product.sku})}>
-          {product.sku}
-         </Checkbox>
-        </Td> 
-        <Td>{product.name}</Td>
-        <Td isNumeric>{product.cant}</Td>
-       </Tr>
-     ))}
-    </Tbody>
-    </Table>
+export function Products({ products, getCheckboxProps }: Props) {
+  return (
+    <Table.Root size='sm' border='1px' boxShadow='sm' mb={48} striped>
+      <Table.Header>
+        <Table.Row>
+          <Table.ColumnHeader>Sku</Table.ColumnHeader>
+          <Table.ColumnHeader>Name</Table.ColumnHeader>
+          <Table.ColumnHeader>Cant</Table.ColumnHeader>
+        </Table.Row>
+      </Table.Header>
+      <Table.Body>
+        {products.map((product) => (
+          <Table.Row key={product.sku}>
+            <Table.Cell>
+              <Checkbox.Root size='md' colorScheme='purple' {...getCheckboxProps({ value: product.sku })}>
+                <Checkbox.Label>{product.sku}</Checkbox.Label>
+              </Checkbox.Root>
+            </Table.Cell>
+            <Table.Cell>{product.name}</Table.Cell>
+            <Table.Cell>{product.cant}</Table.Cell>
+          </Table.Row>
+        ))}
+      </Table.Body>
+    </Table.Root>
   );
 }
